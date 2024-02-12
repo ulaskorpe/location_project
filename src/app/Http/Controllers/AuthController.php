@@ -13,6 +13,7 @@ use Illuminate\Support\Str;
 use Session;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+ 
 class AuthController extends Controller
 {
     use HttpResponses;
@@ -71,6 +72,8 @@ class AuthController extends Controller
     }
 
     public function me(Request $request){
+      
+   
         Session::put('token',null);
         return  $this->success(['user'=>new UserResource(Auth::user()->first()),'token'=>Auth::user()->tokens()->latest()->first()]);
     }

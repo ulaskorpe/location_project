@@ -18,8 +18,8 @@ class UserResource extends JsonResource
             'id'=>(string)$this->id,
             'attributes'=>[
                 'name'=>$this->name,
-                'email'=>$this->description
-              
+                'email'=>$this->email,
+                'locations' => LocationResource::collection($this->locations),
           
             ]
 

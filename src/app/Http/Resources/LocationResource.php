@@ -20,8 +20,9 @@ class LocationResource extends JsonResource
             'id'=>(string)$this->id,
             'attributes'=>[
                 'name'=>$this->name,
-                'description'=>$this->description,
-                'priority'=>$this->priority,
+                'latitude'=>$this->latitude,
+                'longitude'=>$this->longitude,
+                'color'=>$this->color,
                 'created_at'=>$this->created_at,
                 'updated_at'=>$this->updated_at,
          
