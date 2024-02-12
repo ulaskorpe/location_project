@@ -24,8 +24,10 @@ class StoreTaskRequest extends FormRequest
         return [
             'name'=>['required','max:255'],
             'description'=>['required' ],
-            'priority'=>['required','in:low,medium,high'],
-            'token'=>['required', 'string', 'max:255', 'in:'.env('STATIC_TOKEN')]
+            'latitude'=>['required','numeric','between:-90,90' ],
+            'longitude'=>['required','numeric','between: -180,180' ],
+            'color'=>['required','in:red,blue,green'],
+            
         ];
     }
 }

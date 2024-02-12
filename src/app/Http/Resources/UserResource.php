@@ -18,8 +18,8 @@ class UserResource extends JsonResource
             'id'=>(string)$this->id,
             'attributes'=>[
                 'name'=>$this->name,
-                'email'=>$this->description,
-                'admin_code'=>$this->priority,
+                'email'=>$this->description
+              
           
             ]
 

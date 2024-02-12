@@ -1,7 +1,10 @@
 <?php
 
+use App\Http\Controllers\LocationController;
+ 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,4 +19,15 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
+});
+
+
+
+Route::post('/login-post',[AuthController::class,'login_post'])->name('admin-login-post');
+Route::post('/register',[AuthController::class,'register'])->name('register');
+ 
+Route::group(['middleware'=>['auth:sanctum']],function(){
+    Route::post('/logout',[AuthController::class,'logout'])->name('admin-logout-post');
+    Route::post('/me',[AuthController::class,'me'])->name('admin-me-post');
+    Route::resource('/locations',LocationController::class);
 });

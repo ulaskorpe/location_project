@@ -25,7 +25,7 @@ class StoreUserRequest extends FormRequest
             'name'=>['required','string','max:255'],
             'email'=>['required','string','max:255','email','unique:users'],
             'password'=>['required','confirmed','min:6'],//,Rules/Password::defaults]
-            'token'=>['required', 'string', 'max:255', 'in:'.env('STATIC_TOKEN')],
+           
         ];
     }
 }

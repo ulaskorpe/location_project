@@ -4,32 +4,20 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\LoginUserRequest;
 use App\Http\Requests\StoreUserRequest;
+use App\Http\Resources\UserResource;
 use App\Traits\HttpResponses;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Session;
-use Auth;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 class AuthController extends Controller
 {
     use HttpResponses;
-
-    
-
-    public function login(){
-        return view('admin.login');
-    }
-
-    private function generateAdminCode(){
-        $ch=true;
-        while($ch){
-            $token = rand(100000,999999);
-            $user = User::where('admin_code','=',$token)->first();
-            $ch = (!empty($user))?true:false;
-        }
-        return $token;
-    }
+ 
+ 
 
     public function register(StoreUserRequest $request){
 
@@ -41,7 +29,7 @@ class AuthController extends Controller
                 'password'=> Hash::make($request->password),
                 'remember_token' => Str::random(10),
                 'email_verified_at'=>now(),
-                'admin_code'=>$this->generateAdminCode()
+               
         ]);
 
              
@@ -65,18 +53,25 @@ class AuthController extends Controller
          $request->validated($request->all());
      //  $validatedData = $request->validated();
 
-        if(!Auth::attempt(['admin_code' => $request->admin_code, 'password' => $request->password])){
+        if(!Auth::attempt(['email' => $request->email, 'password' => $request->password])){
             return $this->error('','kullanıcı bulunamadı',401);
         }
 
-        $user = User::where('admin_code',$request->admin_code)->first();
+        $user = User::where('email',$request->email)->first();
             
-        return  $this->success(['user'=>$user,'token'=>$this->createToken($user)]);
+        return  $this->success(['user'=>new UserResource($user),'token'=>$this->createToken($user)]);
     }
 
     public function logout(Request $request){
-         Auth::user()->currentAccessToken()->delete();
+        // Auth::user()->currentAccessToken()->delete();
+        
+          DB::table('personal_access_tokens')->where('tokenable_id','=',Auth::user()->first()->id)->delete();
 
-        return $this->success('','logged out',200);
+         return $this->success('','logged out',200);
+    }
+
+    public function me(Request $request){
+        Session::put('token',null);
+        return  $this->success(['user'=>new UserResource(Auth::user()->first()),'token'=>Auth::user()->tokens()->latest()->first()]);
     }
 }

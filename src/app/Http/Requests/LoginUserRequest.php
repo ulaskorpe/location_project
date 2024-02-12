@@ -22,19 +22,20 @@ class LoginUserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'admin_code'=>['required','integer'],
+            'email'=>['required','email'],
             'password'=>['required','string','min:6'],
-            'token'=>['required', 'string', 'max:255', 'in:'.env('STATIC_TOKEN')],
+             
         ];
     }
 
     public function messages()
     {
         return [
-            'admin_code.required'=>'admin code zorunlu',
+          
             'email.required' => 'eposta alanı zorunlu',
-            'email.string' => 'The :attribute field must be a string.',
-           'email.max' => 'The :attribute field must not exceed :max characters.',
+            'password.required' => 'şifre alanı zorunlu',
+            'email.email' => 'geçerli email değl',
+           
             // Add custom error messages for each validation rule
         ];
     }
