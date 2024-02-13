@@ -22,11 +22,12 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 
-
-Route::post('/login-post',[AuthController::class,'login_post'])->name('admin-login-post');
-Route::post('/register',[AuthController::class,'register'])->name('register');
  
-Route::group(['middleware'=>['auth:sanctum']],function(){
+Route::group(['middleware'=>'throttle:login_register_limit'],function(){
+    Route::post('/login-post',[AuthController::class,'login_post'])->name('admin-login-post');
+    Route::post('/register',[AuthController::class,'register'])->name('register');
+});
+Route::group(['middleware'=>['auth:sanctum','throttle:30,60']],function(){
     Route::post('/logout',[AuthController::class,'logout'])->name('admin-logout-post');
     Route::post('/me',[AuthController::class,'me'])->name('admin-me-post');
     Route::resource('/locations',LocationController::class);

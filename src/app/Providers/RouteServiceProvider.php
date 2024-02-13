@@ -37,4 +37,10 @@ class RouteServiceProvider extends ServiceProvider
                 ->group(base_path('routes/web.php'));
         });
     }
+    protected function configureRateLimiting(){
+        RateLimiter::for('login_register_limit',function(Request $request){
+            return Limit::perMinute(100);
+        });
+    }
+
 }

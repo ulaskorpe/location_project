@@ -59,6 +59,7 @@ class LocationController extends Controller
      */
     public function show(Location $location)
     {
+        
     
         if(Auth::user()->id === $location->user_id  ){
            return $this->success(new LocationResource($location),'location details',200);
@@ -101,12 +102,15 @@ class LocationController extends Controller
      */
     public function destroy(Location $location )
     {
+        
+         
         if ($this->isNotAuthorized($location)) {
             return ($this->isNotAuthorized($location)) ;
+             
         }
-
-         $location->delete();
-           return  $this->success('','location deleted',204);
+         
+          $location->delete();
+          return $this->success('','location deleted');   
     }
 
     private function isNotAuthorized(Location $location){

@@ -38,7 +38,7 @@ class AuthController extends Controller
         return $this->success([
             'user'=>$user,
             'token'=>$this->createToken($user)
-        ]);
+        ],'user created',201);
      //   return  response()->json("register");
     }
 
@@ -50,7 +50,7 @@ class AuthController extends Controller
     
     public function login_post(LoginUserRequest $request){
  
-
+      
          $request->validated($request->all());
      //  $validatedData = $request->validated();
 
@@ -61,6 +61,7 @@ class AuthController extends Controller
         $user = User::where('email',$request->email)->first();
             
         return  $this->success(['user'=>new UserResource($user),'token'=>$this->createToken($user)]);
+ 
     }
 
     public function logout(Request $request){
@@ -76,5 +77,10 @@ class AuthController extends Controller
    
         Session::put('token',null);
         return  $this->success(['user'=>new UserResource(Auth::user()->first()),'token'=>Auth::user()->tokens()->latest()->first()]);
+    }
+
+    protected function throttleKey(Request $request)
+    {
+        return mb_strtolower($request->input('email')) . '|' . $request->ip();
     }
 }
